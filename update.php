@@ -1,0 +1,34 @@
+<?php
+session_start();
+require 'connect.php';
+$conn = Connect();
+if(!isset($_SESSION['login_user1'])){
+header('Location: index.php'); // Redirecting To Home Page
+}
+
+else{
+
+extract($_GET);
+
+$opassword = $conn->real_escape_string($_POST['opassword']);
+$npassword = $conn->real_escape_string($_POST['npassword']);
+$cpassword = $conn->real_escape_string($_POST['cpassword']);
+
+if ($npassword==$cpassword) {
+
+
+$sql ="UPDATE customer SET password='$npassword' WHERE fullname = '".$_SESSION['login_user2']."' ";
+$query=mysqli_query($conn,$sql);
+if ($query) {
+	header('Location: setting.php?passwordchanged=password updated!');
+}}else{
+	header('Location: setting.php?wrongpassword=password does not match');
+	
+}
+
+
+$conn->close();
+}
+
+
+?>
